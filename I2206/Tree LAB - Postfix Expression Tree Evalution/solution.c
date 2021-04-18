@@ -2,10 +2,10 @@
 // code in picture 1 and 2 are already giving
 // operation function provided by Dr give segmentation FAULT maybe a Bug, so Implementing one will make this pass.
 
-ExpressionTree returnPop(stack *s) {
+element returnPop(stack *s) {
     element e;
-    Top(&t , &e);
-    pop(&s);
+    Top(*s , &e);
+    Pop(s);
     return e;
 }
 

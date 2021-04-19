@@ -1,6 +1,5 @@
 // Question is to implement following video https://www.youtube.com/watch?v=xSR38kgzyiQ
 // code in picture 1 and 2 are already giving
-// operation function provided by Dr give segmentation FAULT maybe a Bug, so Implementing one will make this pass.
 
 element returnPop(stack *s) {
     element e;
@@ -16,8 +15,8 @@ ExpressionTree Build(char *postfix) {
     for(int i = 0 ; *(postfix+i) != '\0'; i++) {
         left = right = NULL;
         if(is_operator( *(postfix+i) ) ) {
-            if( *(postfix+i) != '#') left = returnPop(&s);
             right = returnPop(&s);
+            if( *(postfix+i) != '#') left = returnPop(&s);
         }
         Push(&s , Construct(*(postfix+i) , left , right) );
     }

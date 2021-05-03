@@ -1,7 +1,7 @@
 import java.util.*;
 
 class Matrix {
-    int M[][] , n , m;
+    private int M[][] , n , m;
     
     Matrix() {
         Scanner s = new Scanner(System.in);

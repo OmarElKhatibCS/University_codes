@@ -53,7 +53,7 @@ class Matrix {
                 
                 while(temp == M[k][j]) {
                     k++;
-                    if(k == n) return;
+                    if(k == n) break;
                     temp = M[k][i];
                     if(M[k][i] < M[k][j])
                         swapCols(i , j);

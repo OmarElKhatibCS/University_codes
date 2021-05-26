@@ -11,6 +11,7 @@
 	str6:	.asciiz "Enter convertible (0=No , 1=Yes) : "
 	# path should be Full path to where I want to save my data
 	outputFileName: .asciiz "C:\\Users\\Administrator\\Documents\\University_codes\\I2207\\project\\cars.dat"
+	newLine: .asciiz "\n"
 .text:
 main:
 # Dynamically allocate space for a car
@@ -33,6 +34,7 @@ carsArrayAllocator:
    	move $t1,$v0 # N = Number of cars
 	li   $v0, 9      # sbrk code = 9
     	move $a0,$t1
+    	mul $a0,$a0,48
     	syscall
     	move $s0,$v0 # s0 contain start index of array
 fillCars:

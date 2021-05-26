@@ -1,3 +1,6 @@
+# Copyright (c) 
+# Author : Omar ElKhatib
+
 # sturct size is
 # 16*16+4*4 = 32+16 = 48
 # lets say we can read up to 100 car , so 100*48 = 4800 byte
@@ -60,12 +63,12 @@ readCarsFromFile:
 printCarsData:
 	move $t2,$0 # i = 0
 	move $t0,$s0 # store BASE_ADDRESS of the struct Array
-	iterateOverCars:
-		beq  $t2,$t1,end # if i == N end
-		printHeader:
+	printHeader:
 		li $v0, 4
 		la $a0, headerMessage
 		syscall
+	iterateOverCars:
+		beq  $t2,$t1,end # if i == N end
 		
 		printName:
 		li $v0, 4
@@ -133,6 +136,11 @@ printCarsData:
 		lw $a0, 44($t0)
 		syscall
 		
+		li $v0, 4
+		la $a0, newLine
+		syscall
+		
+		printNewLine:
 		li $v0, 4
 		la $a0, newLine
 		syscall

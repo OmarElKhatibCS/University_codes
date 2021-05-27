@@ -13,9 +13,18 @@
 	str5:	.asciiz "horsePower : "
 	str6:	.asciiz "convertible (0=No , 1=Yes) : "
 	# path should be Full path to where I want to save my data
-	fileName: .asciiz "C:\\Users\\Administrator\\Documents\\University_codes\\I2207\\project\\cars.dat"
+	#fileName: .asciiz "C:\\Users\\Administrator\\Documents\\University_codes\\I2207\\project\\cars.dat"
+	fileName: .asciiz "/home/omarlap/Documents/University_codes/I2207/project/cars.dump"
 	newLine: .asciiz "\n"
-	headerMessage: .asciiz "******** Cars DATA ********\n"
+	
+	carP1: .asciiz "                     _______\n"
+	carP2: .asciiz "                    //  ||\\ \\\n"
+	carP3: .asciiz "              _____//___||_\\ \\___\n"
+	carP4: .asciiz "              )  _          _    \\\n"
+	carP5: .asciiz "              |_/ \\________/ \\___|\n"
+	carP6: .asciiz "________________\\_/________\\_/___________________\n"
+	
+	headerMessage: .asciiz "\n******** Cars DATA ********\n"
 .text:
 main:
 # Dynamically allocate space for a car
@@ -27,16 +36,9 @@ main:
 
 # $s0 : BASE_ADDRESS of array
 # $t1 : Number of cars N
-carsArrayAllocator:
-	li $v0, 4
-	la $a0, str0
-   	syscall
-   	li $v0, 5
-    	syscall
-    	
-   	move $t1,$v0 # N = Number of cars
+carsArrayAllocator:    	
 	li   $v0, 9      # sbrk code = 9
-    	move $a0,$t1
+    	li $a0,4800 # can read maximum of 100 car
     	syscall
     	move $s0,$v0 # s0 contain start index of array
 readCarsFromFile:
@@ -52,8 +54,9 @@ readCarsFromFile:
 	li   $v0, 14       # system call for reading to file
 	move $a0, $s6      # file descriptor 
 	move $a1, $s0      # address of buffer from which to read
-	mul $a2,$t1,48	   # Buffer size is N*48 , 48 is size of car struct
+	li $a2,4800	   # Buffer size is N*48 , 48 is size of car struct
 	syscall            # read from file
+	move $s1,$v0 	   # s1 contain place of EOF
 
 	# Close the file 
 	li   $v0, 16       # system call for close file
@@ -61,14 +64,32 @@ readCarsFromFile:
 	syscall            # close file
 	
 printCarsData:
-	move $t2,$0 # i = 0
 	move $t0,$s0 # store BASE_ADDRESS of the struct Array
+	printCar:
+		li $v0, 4
+		la $a0, carP1
+		syscall
+		li $v0, 4
+		la $a0, carP2
+		syscall
+		li $v0, 4
+		la $a0, carP3
+		syscall
+		li $v0, 4
+		la $a0, carP4
+		syscall
+		li $v0, 4
+		la $a0, carP5
+		syscall
+		li $v0, 4
+		la $a0, carP6
+		syscall
 	printHeader:
 		li $v0, 4
 		la $a0, headerMessage
 		syscall
 	iterateOverCars:
-		beq  $t2,$t1,end # if i == N end
+		beq  $s1,$zero,end # reach end of file
 		
 		printName:
 		li $v0, 4
@@ -146,7 +167,7 @@ printCarsData:
 		syscall
    	
 	addi $t0,$t0,48 # struct size is 48 , so each time I fill a struct I move to next location
-	addi $t2,$t2,1 # i++
+	subi $s1,$s1,48 # each time I read a struct deacrese EOF
 	j iterateOverCars
 end:
 	li $v0,10

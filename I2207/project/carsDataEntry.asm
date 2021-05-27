@@ -13,7 +13,8 @@
 	str5:	.asciiz "Enter horsePower : "
 	str6:	.asciiz "Enter convertible (0=No , 1=Yes) : "
 	# path should be Full path to where I want to save my data
-	outputFileName: .asciiz "C:\\Users\\Administrator\\Documents\\University_codes\\I2207\\project\\cars.dat"
+	#fileName: .asciiz "C:\\Users\\Administrator\\Documents\\University_codes\\I2207\\project\\cars.dump"
+	fileName: .asciiz "/home/omarlap/Documents/University_codes/I2207/project/cars.dump"
 	newLine: .asciiz "\n"
 .text:
 main:
@@ -98,7 +99,7 @@ fillCars:
 saveCarsInFile:
 	# Open (for writing) a file that does not exist
 	li   $v0, 13       # system call for open file
-	la   $a0, outputFileName     # output file name
+	la   $a0, fileName # output file name
 	li   $a1, 1       # Open for writing (flags are 0: read, 1: write)
 	li   $a2, 0        # mode is ignored
 	syscall            # open a file (file descriptor returned in $v0)

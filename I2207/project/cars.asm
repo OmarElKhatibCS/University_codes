@@ -40,6 +40,9 @@
 	
 	headerMessage: .asciiz "\n******** Cars DATA ********\n"
 	newLine: .asciiz "\n"
+	
+	error_msg0: .asciiz "Failed to open file\n"
+	error_msg1: .asciiz "No cars data found!\n"
 
 .text:
 main:
@@ -182,6 +185,7 @@ saveCarsInFile:
 	li   $a1, 1       # Open for writing (flags are 0: read, 1: write)
 	li   $a2, 0        # mode is ignored
 	syscall            # open a file (file descriptor returned in $v0)
+	blt $v0,0,failedToOpenFile # if we failed to open file
 	move $s6, $v0      # save the file descriptor 
 
 	# Write to file just opened
@@ -205,6 +209,7 @@ loadCarsFromFile:
 	li   $a1, 0       # Open for writing (flags are 0: read, 1: write)
 	li   $a2, 0        # mode is ignored
 	syscall            # open a file (file descriptor returned in $v0)
+	blt $v0,0,failedToOpenFile # if we failed to open file
 	move $s6, $v0      # save the file descriptor 
 
 	# read from file just opened
@@ -223,6 +228,7 @@ loadCarsFromFile:
 	b main_loop
 	
 displayCarsData:
+	beq $s0,$s1,noCarsData
 	move $t0,$s0 # store BASE_ADDRESS of the struct Array
 	#print header message
 	li $v0, 4
@@ -311,6 +317,18 @@ displayCarsData:
 	j iterateOverCars_print
 	end_iteration_print:
 		b main_loop
+failedToOpenFile:
+	li $v0, 4
+	la $a0, error_msg0
+	syscall
+	
+	b main_loop
+noCarsData:
+	li $v0, 4
+	la $a0, error_msg1
+	syscall
+	
+	b main_loop
 end:
 	li $v0,10
 	syscall

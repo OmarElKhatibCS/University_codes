@@ -55,17 +55,18 @@ main:
 # $s0 : BASE_ADDRESS of array
 # $s1 : pointer to next free address in array
 # $s2 : menu option
+# $s3 : contain number of cars
 carsArrayAllocator:
 	li $v0, 4
 	la $a0, in_str0
    	syscall
    	li $v0, 5
 	syscall
+	
+	move $s3 , $v0 # N=$s3= number of cars
     	
-   	move $t1,$v0 # N = Number of cars
+   	mul $a0,$v0,48 # v0 contain number of cars
 	li   $v0, 9      # sbrk code = 9
-	move $a0,$t1
-	mul $a0,$a0,48
 	syscall
 	move $s0,$v0 # s0 contain start index of array
 	move $s1,$s0 # in allocation start and end of array is 0
@@ -210,7 +211,7 @@ loadCarsFromFile:
 	li   $v0, 14       # system call for reading to file
 	move $a0, $s6      # file descriptor 
 	move $a1, $s1      # append to current cars
-	li $a2,4800	   # Buffer size is N*48 , 48 is size of car struct
+	mul $a2,$s3,48	   # Buffer size is N*48 , 48 is size of car struct
 	syscall            # read from file
 	add $s1,$s1,$v0 # $v0 contain end of file
 

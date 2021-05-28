@@ -19,10 +19,10 @@
 	in_str4:	.asciiz "Enter cylindre : "
 	in_str5:	.asciiz "Enter horsePower : "
 	in_str6:	.asciiz "Enter convertible (0=No , 1=Yes) : "
+	in_str7:	.asciiz "Enter fullPath/filename.extention : "
 
-	# path should be Full path to where I want to save my data
-	#fileName: .asciiz "C:\\Users\\Administrator\\Documents\\University_codes\\I2207\\project\\cars.dump"
-	fileName: .asciiz "/home/omarlap/Documents/University_codes/I2207/project/cars.dump"
+	# path should be Full path to the file
+	fullFilePath: .space 125
 	
 	out_str1:	.asciiz "name : "
 	out_str2:	.asciiz "model : "
@@ -179,9 +179,11 @@ addCar:
 	b main_loop
 	
 saveCarsInFile:
+	jal readFileName
+	
 	# Open (for writing) a file that does not exist
 	li   $v0, 13       # system call for open file
-	la   $a0, fileName # output file name
+	la   $a0, fullFilePath # output file name
 	li   $a1, 1       # Open for writing (flags are 0: read, 1: write)
 	li   $a2, 0        # mode is ignored
 	syscall            # open a file (file descriptor returned in $v0)
@@ -203,9 +205,11 @@ saveCarsInFile:
 	b main_loop
 
 loadCarsFromFile:
+	jal readFileName
+	
 	# Open (for read) a file that does not exist
 	li   $v0, 13       # system call for open file
-	la   $a0, fileName     # output file name
+	la   $a0, fullFilePath     # output file name
 	li   $a1, 0       # Open for writing (flags are 0: read, 1: write)
 	li   $a2, 0        # mode is ignored
 	syscall            # open a file (file descriptor returned in $v0)
@@ -317,6 +321,31 @@ displayCarsData:
 	j iterateOverCars_print
 	end_iteration_print:
 		b main_loop
+
+readFileName:
+	move $a2, $0
+	# readName
+	li $v0, 4
+	la $a0, in_str7
+	syscall
+
+	li $v0, 8
+	la $a0,fullFilePath
+	li $a1, 125 # string max size
+	syscall
+	
+	# This method will remove new Line when reading file path
+	removeNewLineFromString:
+    		lbu $a3, fullFilePath($a2)  
+    		addiu $a2, $a2, 1
+    		bnez $a3, removeNewLineFromString       # Search the NULL char code
+    		beq $a1, $a2, end_removeNewLineFromString   # Check whether the buffer was fully loaded
+    		subiu $a2, $a2, 2    # Otherwise 'remove' the last character
+    		sb $0, fullFilePath($a2)     # and put a NULL instead
+    	
+	end_removeNewLineFromString:
+	jr $ra
+
 failedToOpenFile:
 	li $v0, 4
 	la $a0, error_msg0

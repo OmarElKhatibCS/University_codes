@@ -46,7 +46,7 @@ fillCars:
 	move $t0,$s0 # $t0 will be modified each love , so $s0 will still the same
 	iterateOverCars:
 	beq  $t2,$t1,saveCarsInFile # if i == N end
-	readName:
+	# readName
 		li $v0, 4
 		la $a0, str1
 	   	syscall
@@ -55,7 +55,7 @@ fillCars:
 		la $a0,0($t0)
 	        li $a1, 16 # string max size
 	        syscall
-	readModel:
+	# readModel
 		li $v0, 4
 		la $a0, str2
 	   	syscall
@@ -64,28 +64,28 @@ fillCars:
 		la $a0,16($t0)
 	        li $a1, 16 # string max size
 	        syscall
-	readYear:
+	# readYear
 		li $v0, 4
 		la $a0, str3
 	   	syscall
 	   	li $v0, 5
 	    	syscall
 	   	sw $v0,32($t0)
-	readCylindre:
+	# readCylindre
 		li $v0, 4
 		la $a0, str4
 	   	syscall
 	   	li $v0, 5
 	    	syscall
 	   	sw $v0,36($t0)
-	readHorsePower:
+	# readHorsePower
 		li $v0, 4
 		la $a0, str5
 	   	syscall
 	   	li $v0, 5
 	    	syscall
 	   	sw $v0,40($t0)
-	readConvertible:
+	# readConvertible
 		li $v0, 4
 		la $a0, str6
 	   	syscall

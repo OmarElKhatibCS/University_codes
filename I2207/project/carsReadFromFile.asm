@@ -17,12 +17,12 @@
 	fileName: .asciiz "/home/omarlap/Documents/University_codes/I2207/project/cars.dump"
 	newLine: .asciiz "\n"
 	
-	carP1: .asciiz "                     _______\n"
-	carP2: .asciiz "                    //  ||\\ \\\n"
-	carP3: .asciiz "              _____//___||_\\ \\___\n"
-	carP4: .asciiz "              )  _          _    \\\n"
-	carP5: .asciiz "              |_/ \\________/ \\___|\n"
-	carP6: .asciiz "________________\\_/________\\_/___________________\n"
+	carLogoP1: .asciiz "                     _______\n"
+	carLogoP2: .asciiz "                    //  ||\\ \\\n"
+	carLogoP3: .asciiz "              _____//___||_\\ \\___\n"
+	carLogoP4: .asciiz "              )  _          _    \\\n"
+	carLogoP5: .asciiz "              |_/ \\________/ \\___|\n"
+	carLogoP6: .asciiz "________________\\_/________\\_/___________________\n"
 	
 	headerMessage: .asciiz "\n******** Cars DATA ********\n"
 .text:
@@ -65,33 +65,35 @@ readCarsFromFile:
 	
 printCarsData:
 	move $t0,$s0 # store BASE_ADDRESS of the struct Array
-	printCar:
-		li $v0, 4
-		la $a0, carP1
-		syscall
-		li $v0, 4
-		la $a0, carP2
-		syscall
-		li $v0, 4
-		la $a0, carP3
-		syscall
-		li $v0, 4
-		la $a0, carP4
-		syscall
-		li $v0, 4
-		la $a0, carP5
-		syscall
-		li $v0, 4
-		la $a0, carP6
-		syscall
-	printHeader:
-		li $v0, 4
-		la $a0, headerMessage
-		syscall
+	# print car logo
+	li $v0, 4
+	la $a0, carLogoP1
+	syscall
+	li $v0, 4
+	la $a0, carLogoP2
+	syscall
+	li $v0, 4
+	la $a0, carLogoP3
+	syscall
+	li $v0, 4
+	la $a0, carLogoP4
+	syscall
+	li $v0, 4
+	la $a0, carLogoP5
+	syscall
+	li $v0, 4
+	la $a0, carLogoP6
+	syscall
+
+	#print header message
+	li $v0, 4
+	la $a0, headerMessage
+	syscall
+	
 	iterateOverCars:
 		beq  $s1,$zero,end # reach end of file
 		
-		printName:
+		# printName
 		li $v0, 4
 		la $a0, str1
 		syscall
@@ -100,7 +102,7 @@ printCarsData:
 		la $a0, 0($t0)
 		syscall
 		
-		printModel:
+		# printModel
 		li $v0, 4
 		la $a0, str2
 		syscall
@@ -109,7 +111,7 @@ printCarsData:
 		la $a0, 16($t0)
 		syscall
 		
-		printYear:
+		# printYear
 		li $v0, 4
 		la $a0, str3
 		syscall
@@ -122,7 +124,7 @@ printCarsData:
 		la $a0, newLine
 		syscall
 		
-		printCylinder:
+		# printCylinder
 		li $v0, 4
 		la $a0, str4
 		syscall
@@ -135,7 +137,7 @@ printCarsData:
 		la $a0, newLine
 		syscall
 		
-		printPower:
+		# printPower
 		li $v0, 4
 		la $a0, str5
 		syscall
@@ -148,7 +150,7 @@ printCarsData:
 		la $a0, newLine
 		syscall
 		
-		printConvertible:
+		# printConvertible
 		li $v0, 4
 		la $a0, str6
 		syscall
@@ -161,7 +163,7 @@ printCarsData:
 		la $a0, newLine
 		syscall
 		
-		printNewLine:
+		# printNewLine
 		li $v0, 4
 		la $a0, newLine
 		syscall

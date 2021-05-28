@@ -187,15 +187,13 @@ saveCarsInFile:
 	li   $v0, 15       # system call for write to file
 	move $a0, $s6      # file descriptor 
 	move $a1, $s0      # address of buffer from which to write
-	mul $a2,$t1,48	   # Buffer size is N*48 , 48 is size of car struct
+	sub $a2,$s1,$s0	   # Buffer size is $s1-$s0 (end-start)
 	syscall            # write to file
 
 	# Close the file 
 	li   $v0, 16       # system call for close file
 	move $a0, $s6      # file descriptor to close
 	syscall            # close file
-
-	add $s1,$s1,$t1
 	
 	b main_loop
 

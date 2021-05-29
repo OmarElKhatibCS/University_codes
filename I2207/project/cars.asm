@@ -43,6 +43,7 @@
 	
 	error_msg0: .asciiz "Failed to open file\n"
 	error_msg1: .asciiz "No cars data found!\n"
+	error_msg2: .asciiz "Table is Full , maybe save file and start new project with bigger size!\n"
 
 .text:
 main:
@@ -127,6 +128,7 @@ carsMenu:
 	jr $ra
 
 addCar:
+	jal isFullArray
 	# readName
 	li $v0, 4
 	la $a0, in_str1
@@ -205,6 +207,7 @@ saveCarsInFile:
 	b main_loop
 
 loadCarsFromFile:
+	jal isFullArray
 	jal readFileName
 	
 	# Open (for read) a file that does not exist
@@ -220,7 +223,14 @@ loadCarsFromFile:
 	li   $v0, 14       # system call for reading to file
 	move $a0, $s6      # file descriptor 
 	move $a1, $s1      # append to current cars
-	mul $a2,$s3,48	   # Buffer size is N*48 , 48 is size of car struct
+	
+	# calculate remaining size in array
+	# left space in the array is N*48-(s1-s0)
+	mul $t0,$s3,48
+	sub $t1 , $s1 , $s0
+	sub $t0,$t0,$t1
+	
+	move $a2, $t0	   # Buffer size is N*48 , 48 is size of car struct
 	syscall            # read from file
 	add $s1,$s1,$v0 # $v0 contain end of file
 
@@ -346,6 +356,19 @@ readFileName:
 	end_removeNewLineFromString:
 	jr $ra
 
+isFullArray:
+	sub $t0,$s1,$s0 # Number of cars in the array is (s1-s0)/48
+	div $t0,$t0,48
+	beq $t0,$s3,fullTable # in array length same as cars dont add
+	jr $ra
+	
+fullTable:
+	li $v0, 4
+	la $a0, error_msg2
+	syscall
+	
+	b main_loop
+	
 failedToOpenFile:
 	li $v0, 4
 	la $a0, error_msg0

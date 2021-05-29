@@ -117,6 +117,8 @@ carsMenu:
 	la $a0, menu_msg5
 	jal printf
 	
+	move $ra,$t0 # reset ra because it changed after calling printf
+	
 	li $v0, 5
 	syscall
 	blt $v0, 1 , carsMenu

@@ -34,7 +34,7 @@ printf:
 	move $s3, $a3	# arg3 (optional)
 	li	$s4, 0	# set argument counter to zero
 	la	$s6, printf_buf	# set s6 to base of printf buffer
-main_loop:	# process chars in formated string
+printf_main_loop:	# process chars in formated string
 	lb	$s5, 0($s0)	# get next format flag
 	addu $s0, $s0, 1	# increment $s0 to point to next char
 	
@@ -46,19 +46,19 @@ main_loop:	# process chars in formated string
 	move $a0, $s6	# prepare to make printf_str(4) syscall
 	li	$v0, 4
 	syscall
-	b	main_loop	
+	b	printf_main_loop	
 printf_formated:
 	lb	$s5, 0($s0)	# load the byte to see what formated char we have
 	addu $s0, $s0, 1	
-	beq $s4, 3, main_loop # if I reached maximum of args dont process anymore	
+	beq $s4, 3, printf_main_loop # if I reached maximum of args dont process anymore	
 	beq $s5,'d', printf_int
 	beq $s5,'s', printf_str
-	b	main_loop	
+	b	printf_main_loop	
 printf_shift_args: # code to shift to next formated argument 
 	move $s1,$s2
 	move $s2,$s3
 	add $s4,$s4,1
-	b main_loop
+	b printf_main_loop
 printf_int:	#print decimal integer
 	li $v0, 1
 	move $a0,$s1

@@ -1,3 +1,6 @@
+# Copyright (c) 
+# Author : Omar ElKhatib
+
 # Bitmap Display Configuration:
 # - Unit width in pixels: 16
 # - Unit height in pixels: 16

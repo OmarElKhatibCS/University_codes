@@ -1,11 +1,12 @@
+# Copyright (c) 
+# Author : Omar ElKhatib
+
 # accept maximum of 3 args
 # $s0 contain $a0 - string
 # $s1 contain $a1 - argument 1
 # $s2 contain $a2 - argument 2
 # $s3 contain $a3 - argument 3
 # to call it from external file use jal printf
-.data
-	printf_buf:	.space 2
 .text
 .globl printf
 printf:

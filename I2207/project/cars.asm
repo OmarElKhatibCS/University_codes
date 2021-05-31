@@ -59,11 +59,14 @@ main:
 carsArrayAllocator:
 	move	$t0 , $ra # printf call will override it
 	
+	readArrayLenth:
 	la	$a0 , in_str0
    	jal	printf
    	
    	li	$v0 , 5
 	syscall
+	
+	blez	$v0 , readArrayLenth # n <= 0
 	
 	move	$s3 , $v0 # N=$s3= number of cars
     	
@@ -130,7 +133,7 @@ carsMenu:
 
 addCar:
 	jal 	isFullArray
-	# readName
+	readName:
 	la 	$a0 , in_str1
 	jal 	printf
 
@@ -138,38 +141,44 @@ addCar:
 	la 	$a0 , 0($s1)
 	li 	$a1 , 16 # string max size
 	syscall
-	# readModel
-	la 	$a0 , in_str2
-	jal 	printf
+	readModel:
+		la 	$a0 , in_str2
+		jal 	printf
 
-	li 	$v0 , 8
-	la 	$a0 , 16($s1)
-	li 	$a1 , 16 # string max size
-	syscall
-	# readYear
-	la 	$a0 , in_str3
-	jal 	printf
-	li 	$v0 , 5
-	syscall
-	sw 	$v0 , 32($s1)
-	# readCylindre
-	la 	$a0 , in_str4
-	jal 	printf
-	li 	$v0 , 5
-	syscall
-	sw 	$v0 , 36($s1)
-	# readHorsePower
-	la 	$a0 , in_str5
-	jal 	printf
-	li 	$v0 , 5
-	syscall
-	sw 	$v0 , 40($s1)
-	# readConvertible
-	la 	$a0 , in_str6
-	jal 	printf
-	li 	$v0 , 5
-	syscall
-	sw 	$v0 , 44($s1)
+		li 	$v0 , 8
+		la 	$a0 , 16($s1)
+		li 	$a1 , 16 # string max size
+		syscall
+	readYear:
+		la 	$a0 , in_str3
+		jal 	printf
+		li 	$v0 , 5
+		syscall
+		blez	$v0 , readYear # n <= 0
+		sw 	$v0 , 32($s1)
+	readCylindre:
+		la 	$a0 , in_str4
+		jal 	printf
+		li 	$v0 , 5
+		syscall
+		blez	$v0 , readCylindre # n <= 0
+		sw 	$v0 , 36($s1)
+	readHorsePower:
+		la 	$a0 , in_str5
+		jal 	printf
+		li 	$v0 , 5
+		syscall
+		blez	$v0 , readHorsePower # n <= 0
+		sw 	$v0 , 40($s1)
+	readConvertible:
+		la 	$a0 , in_str6
+		jal 	printf
+		li 	$v0 , 5
+		syscall
+		# if its not 0 or 1 re-read
+		blt	$v0 , 0 , readConvertible
+		bgt	$v0 , 1 , readConvertible
+		sw 	$v0 , 44($s1)
 	   	
 	addi 	$s1 , $s1 , 48 # struct size is 48 , so each time I fill a struct I move to next location
 	

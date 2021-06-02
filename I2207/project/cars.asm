@@ -2,7 +2,7 @@
 # Author : Omar ElKhatib
 
 # sturct size is
-# 16*16+4*4 = 32+16 = 48
+# 16*2+4*4 = 32+16 = 48
 # lets say we can read up to 100 car , so 100*48 = 4800 byte
 .data:
 	menu_msg0: 	.asciiz "enter 1 to add new car\n"

@@ -8,7 +8,7 @@
 	menu_msg0: 	.asciiz "enter 1 to add new car\n"
 	menu_msg1: 	.asciiz "enter 2 to load cars from file\n"
 	menu_msg2: 	.asciiz "enter 3 to save cars into a file\n"
-	menu_msg3: 	.asciiz "enter 4 to display cars from file\n"
+	menu_msg3: 	.asciiz "enter 4 to display cars\n"
 	menu_msg4: 	.asciiz "enter 5 to exit\n"
 	menu_msg5: 	.asciiz "your option : "
 	
